@@ -1,13 +1,13 @@
 // Command deezer-http is a standalone HTTP service backed by Deezer that
-// implements the gossignol generic HTTP provider protocol. It exposes metadata
+// implements a generic HTTP provider protocol. It exposes metadata
 // (search, resolve) plus an audio /download endpoint that streams the decrypted
-// track to the caller (passthrough, nothing written to disk). Register it in
-// gossignol as a dynamic provider:
+// track to the caller (passthrough, nothing written to disk). Register it on the
+// host server as a dynamic provider:
 //
 //	POST /admin/providers  name=deezer endpoint=http://deezer-http:8080
 //
 // The Deezer account ARL is supplied per-request via the X-Deezer-Arl header
-// (gossignol forwards the provider's configured headers verbatim), so one service
+// (the host forwards the provider's configured headers verbatim), so one service
 // can serve several accounts. Configuration (environment):
 //
 //	ADDR           listen address (default ":8080")
@@ -28,10 +28,10 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"github.com/gossignol/deezer-http/deezer"
+	"github.com/ermos/iml-deezer-provider/deezer"
 )
 
-// arlHeader is the request header gossignol forwards (verbatim, on every request)
+// arlHeader is the request header the host forwards (verbatim, on every request)
 // carrying the Deezer account ARL. Set it in the provider's config "headers" blob.
 const arlHeader = "X-Deezer-Arl"
 
@@ -100,6 +100,18 @@ func main() {
 
 	mux.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]any{"status": "ok"})
+	})
+
+	// /capabilities is mandatory and public (no ARL): the host calls it on add
+	// to derive the provider name and config form. version must be 1.
+	mux.Get("/capabilities", func(w http.ResponseWriter, r *http.Request) {
+		writeJSON(w, http.StatusOK, map[string]any{
+			"version": 1,
+			"name":    "deezer",
+			"config": map[string]any{
+				arlHeader: map[string]any{"type": "string", "where": "headers", "required": true},
+			},
+		})
 	})
 
 	mux.Get("/search", need(func(w http.ResponseWriter, r *http.Request, c *client) {

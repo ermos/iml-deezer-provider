@@ -1,4 +1,4 @@
-module github.com/gossignol/deezer-http
+module github.com/ermos/iml-deezer-provider
 
 go 1.25.0
 
