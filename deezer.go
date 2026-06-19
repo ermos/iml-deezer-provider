@@ -6,7 +6,7 @@ import (
 )
 
 // This service is ARL-authenticated (gw-light) and metadata-only — see gw.go.
-// The shapes below are the wire contract consumed by the gossignol generic HTTP
+// The shapes below are the wire contract consumed by the generic HTTP
 // provider (httpprovider).
 
 // Track is the wire shape consumed by the provider's /search, /resolve,
