@@ -10,7 +10,7 @@ func TestGWTrackToTrack(t *testing.T) {
 		"SNG_ID": "123", "SNG_TITLE": "Song", "DURATION": "210",
 		"TRACK_NUMBER": "4", "DISK_NUMBER": "1",
 		"ART_NAME": "A", "ART_ID": "7", "ART_PICTURE": "artHash",
-		"ALB_TITLE": "Al", "ALB_PICTURE": "covHash"
+		"ALB_TITLE": "Al", "ALB_PICTURE": "covHash", "ISRC": "FRLA61300001"
 	}`
 	var gt gwTrack
 	if err := json.Unmarshal([]byte(raw), &gt); err != nil {
@@ -22,6 +22,7 @@ func TestGWTrackToTrack(t *testing.T) {
 		TrackNo: 4, DiscNo: 1, Duration: 210, ProviderArtistID: "7",
 		CoverImageURL:  "https://e-cdns-images.dzcdn.net/images/cover/covHash/500x500-000000-80-0-0.jpg",
 		ArtistImageURL: "https://e-cdns-images.dzcdn.net/images/artist/artHash/500x500-000000-80-0-0.jpg",
+		ISRC:           "FRLA61300001",
 	}
 	if got != want {
 		t.Fatalf("gw mapping mismatch:\n got %+v\nwant %+v", got, want)
