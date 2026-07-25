@@ -24,6 +24,7 @@ type Track struct {
 	ProviderArtistID string `json:"providerArtistId,omitempty"`
 	CoverImageURL    string `json:"coverImageUrl,omitempty"`
 	ArtistImageURL   string `json:"artistImageUrl,omitempty"`
+	ISRC             string `json:"isrc,omitempty"`
 	// No Suffix: metadata is browse-only; audio comes from /download.
 }
 

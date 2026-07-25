@@ -154,6 +154,7 @@ type gwTrack struct {
 	Duration    json.Number `json:"DURATION"`
 	TrackNumber json.Number `json:"TRACK_NUMBER"`
 	DiskNumber  json.Number `json:"DISK_NUMBER"`
+	ISRC        string      `json:"ISRC"`
 }
 
 func (t gwTrack) toTrack() Track {
@@ -169,6 +170,7 @@ func (t gwTrack) toTrack() Track {
 		ProviderArtistID: t.ArtistID.String(),
 		CoverImageURL:    deezerImageURL("cover", t.AlbPicture),
 		ArtistImageURL:   deezerImageURL("artist", t.ArtPicture),
+		ISRC:             t.ISRC,
 	}
 }
 
